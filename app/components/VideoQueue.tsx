@@ -14,29 +14,47 @@ type Video = {
 const REFRESH_INTERVAL_MS=10*1000;
 
 export default function VideoQueue() {
+  // const [queue, setQueue] = useState<Video[]>([
+  //   { id: 'dQw4w9WgXcQ', title: 'Never Gonna Give You Up', votes: 5 },
+  //   { id: 'L_jWHffIx5E', title: 'All Star', votes: 3 },
+  //   { id: 'fJ9rUzIMcZQ', title: 'Bohemian Rhapsody', votes: 7 },
+  // ])
   const [queue, setQueue] = useState<Video[]>([
-    { id: 'dQw4w9WgXcQ', title: 'Never Gonna Give You Up', votes: 5 },
-    { id: 'L_jWHffIx5E', title: 'All Star', votes: 3 },
-    { id: 'fJ9rUzIMcZQ', title: 'Bohemian Rhapsody', votes: 7 },
+      { id: 'dQw4w9WgXcQ', title: 'Never Gonna Give You Up', votes: 5 },
+     { id: 'L_jWHffIx5E', title: 'All Star', votes: 3 },
+     { id: 'fJ9rUzIMcZQ', title: 'Bohemian Rhapsody', votes: 7 },
   ])
-
-  async function refreshStreams(){
+  const fetchQueue = async () => {
     try {
-      const res = await axios.get('/api/streams/my');
-      console.log(res.data);
-      // Update queue if necessary with response data
-      // setQueue(res.data); // Uncomment and structure API response accordingly
+      const response = await axios.get('/api/videos');
+      setQueue(response.data);
     } catch (error) {
-      console.log('Error fetching streams:', error);
+      console.log('Error fetching video queue:', error);
     }
-  }
+  };
 
-  useEffect(()=>{
-    refreshStreams();
-    const interval=setInterval(()=>{
+  // async function refreshStreams(){
+  //   try {
+  //     const res = await axios.get('/api/streams/my');
+  //     console.log(res.data);
+  //     // Update queue if necessary with response data
+  //     // setQueue(res.data); // Uncomment and structure API response accordingly
+  //   } catch (error) {
+  //     console.log('Error fetching streams:', error);
+  //   }
+  // }
+
+  // useEffect(()=>{
+  //   refreshStreams();
+  //   const interval=setInterval(()=>{
       
-    },REFRESH_INTERVAL_MS); 
-  },[]);
+  //   },REFRESH_INTERVAL_MS); 
+  // },[]);
+  useEffect(() => {
+    fetchQueue();
+    const interval = setInterval(fetchQueue, 10000); // Refresh every 10 seconds
+    return () => clearInterval(interval);
+  }, []);
 
 
   const handleVote = (id: string, increment: number) => {

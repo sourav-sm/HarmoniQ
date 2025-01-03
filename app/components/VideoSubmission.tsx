@@ -4,18 +4,26 @@ import { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { YouTubeEmbed } from '@next/third-parties/google'
+import axios from 'axios'
 
 export default function VideoSubmission() {
   const [videoUrl, setVideoUrl] = useState('')
   const [videoId, setVideoId] = useState('')
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     const id = extractVideoId(videoUrl)
     if (id) {
-      setVideoId(id)
+      setVideoId(id);
+      try {
+        await axios.post('/api/video',{videoId:id});
+        alert('Video Submitted Successfuly!');
+      } catch (error) {
+        console.log('Error submitting video:', error);
+        alert('Failed to submit video.');
+      }
       // Here you would typically send this to your backend
-      console.log('Submitted video ID:', id)
+      //console.log('Submitted video ID:', id)
     } else {
       alert('Invalid YouTube URL')
     }
@@ -55,7 +63,10 @@ export default function VideoSubmission() {
           <h3 className="text-xl font-semibold mb-2 text-green-600">
             🎬 Preview:
           </h3>
-          <YouTubeEmbed videoid={videoId} height={200} />
+          {/* <YouTubeEmbed videoid={videoId} /> */}
+          <div className="w-[300px] h-[200px] overflow-hidden">
+                <YouTubeEmbed videoid={videoId} />
+          </div>
         </div>
       )}
     </div>

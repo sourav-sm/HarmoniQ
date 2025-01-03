@@ -1,8 +1,7 @@
+'use client'
 import VideoSubmission from "../components/VideoSubmission"
 import VideoQueue from '../components/VideoQueue'
 import CurrentlyPlaying from '../components/CurrentlyPlaying'
-import { useEffect } from "react";
-import axios from "axios";
 
 export default function Page() {
 
@@ -14,7 +13,8 @@ export default function Page() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Main Content */}
         <div className="md:col-span-2 bg-white p-6 rounded-lg shadow-md">
-          <CurrentlyPlaying videoId="dQw4w9WgXcQ" />
+          {/* <CurrentlyPlaying videoId="dQw4w9WgXcQ" /> */}
+          <CurrentlyPlaying />
           <VideoSubmission />
         </div>
 
